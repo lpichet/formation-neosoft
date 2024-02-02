@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import TodoItem from "./TodoItem";
 
-export default function TodoList({text, sortOrderIsAsc, handleTextChange, handleSortOrderClick, resultTodos, setSelectedTodo}) {
+export default function TodoList({text, sortOrderIsAsc, handleTextChange, handleSortOrderClick, resultTodos, onTodoItemClick}) {
   return (
     <>
     {text && <span>Recherche en cours {text}</span>}
@@ -11,7 +11,7 @@ export default function TodoList({text, sortOrderIsAsc, handleTextChange, handle
       <button onClick={() => handleSortOrderClick(true)} disabled={sortOrderIsAsc}>Asc</button>
       <button onClick={() => handleSortOrderClick(false)} disabled={!sortOrderIsAsc}>Desc</button>
     </div>
-    {resultTodos.map((todo) => <TodoItem key={todo.id} {...todo} setSelectedTodo={setSelectedTodo} />)}
+    {resultTodos.map((todo) => <TodoItem key={todo.id} {...todo} onTodoItemClick={onTodoItemClick} />)}
     </>
   )
 }

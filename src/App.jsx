@@ -9,7 +9,7 @@ function App() {
   const [text, setText] = useState("");
   const [sortOrderIsAsc, setSortOrderIsAsc] = useState(true);
   const [resultTodos, setResultTodos] = useState(todos);
-  const [selectedTodo, setSelectedTodo] = useState(null);
+  const [selectedTodo, setSelectedTodo] = useState(null); // null or {title, completed}
 
   const filterData = (textInput, sortIsAsc) => {
     const result = [...todos]
@@ -32,6 +32,10 @@ function App() {
   const onHeaderClick = () => {
     setSelectedTodo(null)
   }
+
+  const onTodoItemClick = (todo) => {
+    setSelectedTodo(todo)
+  }
   
   return (
     <>
@@ -41,12 +45,16 @@ function App() {
         <TodoItemDetail {...selectedTodo} />
       </>
       ) : (
-        <>
-      <Header onHeaderClick={onHeaderClick}><h1>Liste des todos</h1></Header>
-      <TodoList text={text} sortOrderIsAsc={sortOrderIsAsc} handleTextChange={handleTextChange} handleSortOrderClick={handleSortOrderClick} resultTodos={resultTodos} setSelectedTodo={setSelectedTodo} />
+      <>
+        <Header onHeaderClick={onHeaderClick}><h1>Liste des todos</h1></Header>
+        <TodoList text={text} 
+          sortOrderIsAsc={sortOrderIsAsc} 
+          handleTextChange={handleTextChange} 
+          handleSortOrderClick={handleSortOrderClick} 
+          resultTodos={resultTodos} 
+          onTodoItemClick={onTodoItemClick} />
       </>
     )}
-    
     </>
   )
 }
