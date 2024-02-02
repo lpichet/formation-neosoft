@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import TodoItem from "./TodoItem";
 
-export default function TodoList({text, sortOrderIsAsc, handleTextChange, handleSortOrderClick, resultTodos, onTodoItemClick}) {
+export default function TodoList({text, sortOrderIsAsc, handleTextChange, handleSortOrderClick, resultTodos, onTodoItemClick, selectedTodo}) {
   return (
     <>
     {text && <span>Recherche en cours {text}</span>}

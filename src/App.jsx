@@ -1,58 +1,45 @@
-import { useState } from 'react'
 import './App.css'
-import todos from './todos.json'
 import Header from './Header';
-import TodoList from './TodoList';
-import TodoItemDetail from './TodoItemDetail';
+import TodoList from './todos/TodoList';
+import TodoItemDetail from './todos/TodoItemDetail';
+import { useFilteredData } from './hooks/useFilteredData';
+import { useSelectTodo } from './hooks/useSelectTodo';
 
 function App() {
-  const [text, setText] = useState("");
-  const [sortOrderIsAsc, setSortOrderIsAsc] = useState(true);
-  const [resultTodos, setResultTodos] = useState(todos);
-  const [selectedTodo, setSelectedTodo] = useState(null); // null or {title, completed}
+  const { isLoading, error, resultTodos, text, handleTextChange, sortOrderIsAsc, handleSortOrderClick } = useFilteredData();
+  const [selectedTodo, setSelectedTodo] = useSelectTodo();
+  // useEffect(() => {
+  //   console.log("je m'affiche à chaque fois");
+  // });
 
-  const filterData = (textInput, sortIsAsc) => {
-    const result = [...todos]
-      .filter((todo) => textInput.length === 0 || todo.title.toLowerCase().includes(textInput.toLowerCase()))
-      .sort((a, b) => sortIsAsc ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title));
+  // useEffect(() => {
+  //   console.log("je m'affiche une fois");
+  // }, []);
 
-    setResultTodos(result);
-  }
+  // useEffect(() => {
+  //   const logResize = (e) => console.log('resize', e);
+  //   window.addEventListener('resize', logResize);
+  //   return () => window.removeEventListener('resize', logResize); 
+  // });
+  if(isLoading) return <div>Chargement en cours...</div>;
+  if(error) return <div>Erreur: {error}</div>;
 
-  const handleTextChange = (input) => {
-    setText(input);
-    filterData(input, sortOrderIsAsc);
-  }
-
-  const handleSortOrderClick = (isAsc) => {
-    setSortOrderIsAsc(isAsc);
-    filterData(text, isAsc);
-  }
-
-  const onHeaderClick = () => {
-    setSelectedTodo(null)
-  }
-
-  const onTodoItemClick = (todo) => {
-    setSelectedTodo(todo)
-  }
-  
   return (
     <>
     {selectedTodo ? (
       <>
-        <Header onHeaderClick={onHeaderClick}><h1>Détail</h1></Header>
+        <Header onHeaderClick={() => setSelectedTodo(null)}><h1>Détail</h1></Header>
         <TodoItemDetail {...selectedTodo} />
       </>
       ) : (
       <>
-        <Header onHeaderClick={onHeaderClick}><h1>Liste des todos</h1></Header>
+        <Header onHeaderClick={() => setSelectedTodo(null)}><h1>Liste des todos</h1></Header>
         <TodoList text={text} 
           sortOrderIsAsc={sortOrderIsAsc} 
           handleTextChange={handleTextChange} 
           handleSortOrderClick={handleSortOrderClick} 
           resultTodos={resultTodos} 
-          onTodoItemClick={onTodoItemClick} />
+          onTodoItemClick={setSelectedTodo} />
       </>
     )}
     </>
